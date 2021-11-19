@@ -1,0 +1,29 @@
+Mazes
+ This programming challenge requires you to implement a maze solver. The maze itself is implemented as a series of rooms, with various exits from each. You will be given a start and end room, and you must return the path through the maze - "Go North, then East" for simple.maze, for example. You don't need to return a shortest or most optimal path, just any working path - "East, then North" and "West, then North, then East, then East" are also valid solutions for simple.maze. We have provided a number of sample mazes, as well as framework code for some commonly-used languages, but you are free to implement in any language you want to.
+
+Frameworks:
+ Java:
+  Provide an implementation of the "MazeRunner" interface, located in the src/java/mazes folder. You can test your implementation by adding your implementation in the MazeLoader class and running it with any of the provided mazes - it accepts the path to the maze file as a command line argument. The SampleMazeRunner returns a hard-coded solution to simple.maze. You should create your own implementation that returns a valid path when passed any solveable maze.
+ Javascript:
+  Create a file patterned off of the ReferenceMazeRunner.js file located in the src/javascript/mazes folder, or simply modify that one to contain your own run method. You can test your implementation by modifying MazeLoader.js to use your code and running it with any of the provided mazes - it accepts the path to the maze as a command line argument. Currently, the code in ReferenceMazeRunner contains a run method that returns a hard-coded solution to simple.maze. Modify or create your own version of ReferenceMazeRunner.js. In your version, the run method should return a valid path when passed any solvable maze. You can test your implementation by changing line 1 of MazeLoader.js to refer to your implementation of ReferenceMazeRunner.js and then running "node src/javascript/mazes/MazeLoader.js {PATH_TO_MAZE_FILE}". For example, you might run: "node src/javascript/mazes/MazeLoader.js src/samples/simple.maze" to test your implementation with simple.maze.
+ Python:
+  Create a class that defines a run method, as the ReferenceMazeRunner class in MazeLoader.py located in the src/python/mazes folder, or simply modify that one to contain your own run method.
+  You can test your implementation by modifying MazeLoader:__init__ to use your code and running it with any of the provided mazes - it accepts the path to the maze as a command line argument.
+  The ReferenceMazeRunner class provides an example implementation that returns a hard-coded solution to simple.maze. Modify that one or create your own MazeRunner class where the run method returns a valid path when passed any solvable maze.
+  You can test your implementation by changing line 40 of MazeLoader.py to refer to your implementation of ReferenceMazeRunner.py and then running "python src/python/mazes/MazeLoader.py {PATH_TO_MAZE_FILE}". For example, you might run: "python src/python/mazes/MazeLoader.py src/samples/simple.maze" to test your implementation with simple.maze.
+
+DIY:
+If you want to use a different language, you will have to write your own parser for the maze files. Here is an annotated version of simple.maze
+
+6 # This is the number of rooms in this maze file
+Entrance North:Hall,East:Dining,West:Sitting # Each line defines one room. It is in the format {Unique identifier} {comma-separated list of direction:identifier exit pairs} . 
+Hall South:Entrance,East:Kitchen,West:Bedroom
+Dining North:Kitchen,West:Entrance
+Sitting North:Bedroom,East:Entrance
+Kitchen West:Hall,South:Dining
+Bedroom East:Hall,South:Sitting
+Entrance Kitchen # The final line of the file contains two identifiers, the start and end rooms to be passed to the solver
+# Identifiers and directions may not contain spaces, colons (':'), or commas (','). Identifiers may appear in a room definition before their own line, but all rooms must be defined eventually
+# Identifiers and directions may be any string that doesn't contain a space, colon, or comma. Your program shouldn't make any assumptions about how many different directions may appear in a maze, or what strings may be used as directions
+
+Feel free to look at the parsers for the frameworks to inform your own. Verifying your solution is as simple as starting with the starting room and getting the room for each direction sequentially - if you arrive at the end square at the end, your solution is correct.

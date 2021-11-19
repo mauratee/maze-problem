@@ -1,0 +1,8 @@
+6
+Entrance North:Hall,East:Dining,West:Sitting
+Hall South:Entrance,East:Kitchen,West:Bedroom
+Dining North:Kitchen,West:Entrance
+Sitting North:Bedroom,East:Entrance
+Kitchen West:Hall,South:Dining
+Bedroom East:Hall,South:Sitting
+Entrance Kitchen
