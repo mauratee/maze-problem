@@ -87,33 +87,41 @@ class ReferenceMazeRunner:
     #                 seen.add(exit)
 
 
-    def run(self, start, end, seen=None):
+    def run(self, start, end, seen=None, path=None):
         """ Use recursive depth-first search to check if start and end nodes
             are connected and return path if connected. """
 
         if not seen:
             seen = set()
 
-        path = []
+        if not path:
+            path = []
 
         if start is end:
-            print(f"\nreturning path - {start.name} is {end.name}")
-            return True
+            # path.append(start.exits)
+            # print(f"\nreturning path - {start.name} is {end.name}")
+            print(path)
+            return path
         
         seen.add(start)
-        print(f"adding, {start.name}")
+        # print(f"adding, {start.name}")
 
-        for exit in start.exits.values():
+        for exit in start.exits:
+        # for exit in start.exits.values():
             # print(exit)
-            if exit not in seen:
-
+            exit_object = start.get_square(exit)
+            if exit_object not in seen:
+                print(exit)
+                path.append(exit)
                 print(
-                    f"calling method on {start.name}'s exit {exit.name}"
+                    f"calling method on {start.name}'s exit {exit_object.name}"
                 )
 
-                if self.run(exit, end, seen):
-                    print(f"\nreturning path from checking {exit.name}")
-                    return True
+                if self.run(exit_object, end, seen, path):
+                    # print(exit)
+                    # path.append(exit)
+                    print(f"\nreturning path from checking {exit_object.name}")
+                    return path
 
 
 
@@ -174,7 +182,8 @@ class MazeSquare:
 
 MazeLoader()
 
-# call simple.maze in Command Line:
+# call sample mazes in Command Line:
+# PASSING
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
