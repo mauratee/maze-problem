@@ -1,4 +1,6 @@
 import sys
+# use Python's built-in queue structure
+from collections import deque
 
 # This ReferenceMazeRunner class contains a run method that returns a hard-coded solution to simple.maze. 
 # Modify or create your own version of the ReferenceMazeRunner class. 
@@ -11,8 +13,73 @@ import sys
 
 # Mock submission that will return valid path for simple.maze
 class ReferenceMazeRunner:
+    def __init__(self):
+        # dictionary of all node names paired with the corresponding node object
+        self.master_list = {}
+        
+        try:
+            with open(sys.argv[1], 'r') as f:
+                cell_nums = int(f.readline())
+                for _ in range(cell_nums):
+                    curr_line = f.readline()
+                    parts = curr_line.split(' ', 2)
+                    name = parts[0]
+                    if name not in self.master_list:
+                        self.master_list[name] = MazeSquare(name)
+                    square = self.master_list.get(name)
+                    exits = parts[1].split(',')
+                    for exit in exits:
+                        direction, next_square = exit.split(':')
+                        if next_square not in self.master_list:
+                            self.master_list[next_square] = MazeSquare(next_square)
+                        square.add_exit(self.master_list.get(next_square), direction)
+                start, end = f.readline().split(' ')
+                # print(self.master_list)
+                print(self.master_list.keys())
+                print(len(self.master_list.keys()))
+
+        except FileNotFoundError:
+            print('Location of maze file was not found')
+        except IOError:
+            print('IO Exception reading from maze file')
+
+    def __repr__(self):
+        """Debugging-friendly representation"""
+
+        return f"<MazeSquare: {self.name}>"
+
     def run(self, start, end):
-        return ['North', 'East']
+        """ Use breadth-first search to check if start and end nodes
+            are connected and return path if connected. """
+        
+        # print(f"in run function. start = {start}")
+
+        # Track room nodes to visit using Queue and seen room nodes
+        # using Set.
+        possible_rooms = deque()
+        seen = set()
+        # Add start node to Queue and Set
+        possible_rooms.append(start)
+        seen.add(start)
+        # print(seen)
+        # print(possible_rooms)
+        path = []
+
+        while possible_rooms:
+            room = possible_rooms.popleft()
+            print(room.name)
+            if room is end:
+                return path
+            else:
+                # print("*"*20)
+                # print(f"room.exits = {room.exits}")
+                # print(f"room.exits,values = {room.exits.values()}")
+                for exit in set(room.exits.values()) - seen:
+                    # print("*"*20)
+                    # print(f"exit = {type(exit)}")
+                    possible_rooms.append(exit)
+                    seen.add(exit)
+
 
 class MazeLoader:
     def __init__(self):
@@ -69,3 +136,12 @@ class MazeSquare:
         return self.exits.get(direction, None)                        
 
 MazeLoader()
+
+# call simple.maze in Command Line:
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
