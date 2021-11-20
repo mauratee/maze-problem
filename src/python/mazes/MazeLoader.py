@@ -198,15 +198,16 @@ class MazeSquare:
         return self.exits.get(direction, None) 
 
     def __repr__(self):
-        """Debugging-friendly representation"""
-
+        """Human-friendly representation of MazeSquare object"""
         return f"<MazeSquare: {self.name}>"                       
 
 MazeLoader()
 
 # call sample mazes in Command Line:
-# PASSING
+# PASSING:
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
+
+# HAS ERRORS:
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
