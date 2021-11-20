@@ -24,7 +24,12 @@ class ReferenceMazeRunner:
                     curr_line = f.readline()
                     parts = curr_line.split(' ', 2)
                     name = parts[0]
+                    # print(f"we're in ReferenceMazeRunner init function. name = {name}")
+                    # Strip trailing new line characters
+                    name.replace("\n", "")
+                    # name = name.strip("\n")
                     if name not in self.master_list:
+                        # print(f"name = {name}")
                         self.master_list[name] = MazeSquare(name)
                     square = self.master_list.get(name)
                     exits = parts[1].split(',')
@@ -35,8 +40,8 @@ class ReferenceMazeRunner:
                         square.add_exit(self.master_list.get(next_square), direction)
                 start, end = f.readline().split(' ')
                 # print(self.master_list)
-                print(self.master_list.keys())
-                print(len(self.master_list.keys()))
+                # print(self.master_list.keys())
+                # print(len(self.master_list.keys()))
 
         except FileNotFoundError:
             print('Location of maze file was not found')
@@ -48,37 +53,69 @@ class ReferenceMazeRunner:
 
         return f"<MazeSquare: {self.name}>"
 
-    def run(self, start, end):
-        """ Use breadth-first search to check if start and end nodes
-            are connected and return path if connected. """
+    # def run(self, start, end):
+    #     """ Use breadth-first search to check if start and end nodes
+    #         are connected and return path if connected. """
         
-        # print(f"in run function. start = {start}")
+    #     # print(f"in run function. start = {start}")
 
-        # Track room nodes to visit using Queue and seen room nodes
-        # using Set.
-        possible_rooms = deque()
-        seen = set()
-        # Add start node to Queue and Set
-        possible_rooms.append(start)
-        seen.add(start)
-        # print(seen)
-        # print(possible_rooms)
+    #     # Track room nodes to visit using Queue and seen room nodes
+    #     # using Set.
+    #     possible_rooms = deque()
+    #     seen = set()
+    #     # Add start node to Queue and Set
+    #     possible_rooms.append(start)
+    #     seen.add(start)
+    #     # print(seen)
+    #     # print(possible_rooms)
+    #     path = []
+
+    #     while possible_rooms:
+    #         room = possible_rooms.popleft()
+    #         print(room.name)
+    #         if room is end:
+    #             return path
+    #         else:
+    #             print("*"*20)
+    #             print(f"room.exits = {room.exits}")
+    #             print(f"room.exits.keys = {room.exits.keys()}")
+    #             # print(f"room.exits,values = {room.exits.values()}")
+    #             for exit in set(room.exits.values()) - seen:
+    #                 # print("*"*20)
+    #                 # print(f"exit = {type(exit)}")
+    #                 possible_rooms.append(exit)
+    #                 seen.add(exit)
+
+
+    def run(self, start, end, seen=None):
+        """ Use recursive depth-first search to check if start and end nodes
+            are connected and return path if connected. """
+
+        if not seen:
+            seen = set()
+
         path = []
 
-        while possible_rooms:
-            room = possible_rooms.popleft()
-            print(room.name)
-            if room is end:
-                return path
-            else:
-                # print("*"*20)
-                # print(f"room.exits = {room.exits}")
-                # print(f"room.exits,values = {room.exits.values()}")
-                for exit in set(room.exits.values()) - seen:
-                    # print("*"*20)
-                    # print(f"exit = {type(exit)}")
-                    possible_rooms.append(exit)
-                    seen.add(exit)
+        if start is end:
+            print(f"\nreturning path - {start.name} is {end.name}")
+            return True
+        
+        seen.add(start)
+        print(f"adding, {start.name}")
+
+        for exit in start.exits.values():
+            # print(exit)
+            if exit not in seen:
+
+                print(
+                    f"calling method on {start.name}'s exit {exit.name}"
+                )
+
+                if self.run(exit, end, seen):
+                    print(f"\nreturning path from checking {exit.name}")
+                    return True
+
+
 
 
 class MazeLoader:
