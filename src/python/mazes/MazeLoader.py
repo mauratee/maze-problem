@@ -139,18 +139,17 @@ class ReferenceMazeRunner:
             path = []
 
         seen.add(start)
-        print(("^"* 15) + "BEGIN" + ("^"* 15))
-        print(f"adding start = {start.name}")
-        print(f"{start.name}'s exits are {start.exits}")
+        # print(("^"* 15) + "BEGIN" + ("^"* 15))
+        # print(f"adding start = {start.name}")
+        # print(f"{start.name}'s exits are {start.exits}")
 
-        # path.append(start)
-        print("*"* 10)
-        print(f"Beginning path =  {path}")
+        # print("*"* 10)
+        # print(f"Beginning path =  {path}")
 
         if start is end:
             # path.append(start.exits)
-            print(f"\nreturning path - {start.name} is {end.name}")
-            print(path)
+            # print(f"\nreturning path - {start.name} is {end.name}")
+            # print(path)
             return path
         
 
@@ -159,31 +158,31 @@ class ReferenceMazeRunner:
             # print(direction)
             exit_object = start.get_square(direction)
             if exit_object not in seen:
-                print(">"* 10)
-                print(f"appending direction = {direction}")
+                # print(">"* 10)
+                # print(f"appending direction = {direction}")
                 path.append(direction)
-                print("*"* 10)
-                print(f"path =  {path}")
-                print("*"* 10)
-                print(
-                    f"calling run method on {start.name}'s exit {exit_object.name}"
-                )
-                print(f"{exit_object.name}'s exits are {exit_object.exits}")
+                # print("*"* 10)
+                # print(f"path =  {path}")
+                # print("*"* 10)
+                # print(
+                #     f"calling run method on {start.name}'s exit {exit_object.name}"
+                # )
+                # print(f"{exit_object.name}'s exits are {exit_object.exits}")
                 call_next = self.run(exit_object, end, seen, path)
                 if call_next:
                     # print("<"* 10)
                     # print(f"direction = {direction}")
                     # print(direction)
                     # path.append(direction)
-                    print(f"\nreturning path from checking {exit_object.name}")
+                    # print(f"\nreturning path from checking {exit_object.name}")
                     return path
                 else:
-                    print("<"* 10)
-                    print(f"removing direction = {direction}")
+                    # print("<"* 10)
+                    # print(f"removing direction = {direction}")
                     path.pop()
-                    print("*"* 10)
-                    print(f"path =  {path}")
-                    print("*"* 10)
+                    # print("*"* 10)
+                    # print(f"path =  {path}")
+                    # print("*"* 10)
 
 
 
@@ -221,28 +220,28 @@ class MazeLoader:
                         square.add_exit(self.master_list.get(next_square), direction)
                 start, end = f.readline().split(' ')
                 end = end.strip('\n')
-                print(f"start = {start}")
-                print(f"end = {end}")
+                # print(f"start = {start}")
+                # print(f"end = {end}")
 
                 # print(f"We're in MazeLoader init function")
                 # print(self.master_list)
                 # print(self.master_list.keys())
                 # print(len(self.master_list.keys()))
                 current = self.master_list.get(start)
-                print(f"current = {current}")
+                # print(f"current = {current}")
                 # Change the implemenation of ReferenceMazeRunner, or replace it with your class here
                 ##############################################
                 runner = ReferenceMazeRunner()
                 # print(f"we're in MazeLoader, runner = {runner}")
-                print(f"we're in MazeLoader, self.master_list.get(start) = {self.master_list.get(start)}")
-                print(f"we're in MazeLoader, self.master_list.get(end) = {self.master_list.get(end)}")
+                # print(f"we're in MazeLoader, self.master_list.get(start) = {self.master_list.get(start)}")
+                # print(f"we're in MazeLoader, self.master_list.get(end) = {self.master_list.get(end)}")
                 result = runner.run(self.master_list.get(start), self.master_list.get(end))
-                print(f"we're in MazeLoader, result = {result}")
+                # print(f"we're in MazeLoader, result = {result}")
                 for step in result:
-                    print(f"we're in MazeLoader, step = {step}")
+                    # print(f"we're in MazeLoader, step = {step}")
                     current = current.get_square(step)
-                    print(f"we're in MazeLoader, current = {current}")
-                    print(f"type of current = {type(current)}")
+                    # print(f"we're in MazeLoader, current = {current}")
+                    # print(f"type of current = {type(current)}")
                     if current == None:
                         print('Invalid path returned')
                         break
@@ -301,12 +300,22 @@ MazeLoader()
 
 # call sample mazes in Command Line:
 # PASSING:
+# assert:
 # python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
+# expect: Returned valid path
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
+# expect: Returned valid path
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
+# expect: Returned valid path
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
+# expect: Returned valid path
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
+# expect: Returned valid path
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
+# expect: Returned valid path
+# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
+# expect: Returned valid path
+
 
 # HAS ERRORS:
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
+# None!!
