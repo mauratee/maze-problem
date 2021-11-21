@@ -128,9 +128,9 @@ class ReferenceMazeRunner:
         """ Use recursive depth-first search to check if start and end nodes
             are connected and return path if connected. """
 
-        print(f"We're in ReferenceRunner.run, very beginning: start =  {start}")
-        print(f"We're in ReferenceRunner.run, very beginning: start.exits =  {start.exits}")
-        print(f"We're in ReferenceRunner.run, very beginning: end =  {end}")
+        # print(f"We're in ReferenceRunner.run, very beginning: start =  {start}")
+        # print(f"We're in ReferenceRunner.run, very beginning: start.exits =  {start.exits}")
+        # print(f"We're in ReferenceRunner.run, very beginning: end =  {end}")
 
         if not seen:
             seen = set()
@@ -138,32 +138,52 @@ class ReferenceMazeRunner:
         if not path:
             path = []
 
+        seen.add(start)
+        print(("^"* 15) + "BEGIN" + ("^"* 15))
+        print(f"adding start = {start.name}")
+        print(f"{start.name}'s exits are {start.exits}")
+
+        # path.append(start)
+        print("*"* 10)
+        print(f"Beginning path =  {path}")
+
         if start is end:
             # path.append(start.exits)
             print(f"\nreturning path - {start.name} is {end.name}")
             print(path)
             return path
         
-        seen.add(start)
-        print(f"adding, {start.name}")
-        print(f"{start.name}'s exits are {start.exits}")
 
         for direction in start.exits:
         # for exit in start.exits.values():
-            print(direction)
+            # print(direction)
             exit_object = start.get_square(direction)
             if exit_object not in seen:
-                print(direction)
+                print(">"* 10)
+                print(f"appending direction = {direction}")
                 path.append(direction)
+                print("*"* 10)
+                print(f"path =  {path}")
+                print("*"* 10)
                 print(
-                    f"calling method on {start.name}'s exit {exit_object.name}"
+                    f"calling run method on {start.name}'s exit {exit_object.name}"
                 )
                 print(f"{exit_object.name}'s exits are {exit_object.exits}")
-                if self.run(exit_object, end, seen, path):
-                    # print(exit)
-                    # path.append(exit)
+                call_next = self.run(exit_object, end, seen, path)
+                if call_next:
+                    # print("<"* 10)
+                    # print(f"direction = {direction}")
+                    # print(direction)
+                    # path.append(direction)
                     print(f"\nreturning path from checking {exit_object.name}")
                     return path
+                else:
+                    print("<"* 10)
+                    print(f"removing direction = {direction}")
+                    path.pop()
+                    print("*"* 10)
+                    print(f"path =  {path}")
+                    print("*"* 10)
 
 
 
@@ -186,11 +206,11 @@ class MazeLoader:
                     exits = parts[1].split(',')
                     for exit in exits:
                         direction, next_square = exit.split(':')
-                        print("!"* 10)
-                        print(f"next_square = {next_square}")
+                        # print("!"* 10)
+                        # print(f"next_square = {next_square}")
                         next_square = next_square.strip('\n')
-                        print("!"* 10)
-                        print(f"we stripped the newline?! next_square = {next_square}")
+                        # print("!"* 10)
+                        # print(f"we stripped the newline?! next_square = {next_square}")
                         if next_square not in self.master_list:
                             # print("!"* 10)
                             # print(f"next_square = {next_square}")
@@ -205,9 +225,9 @@ class MazeLoader:
                 print(f"end = {end}")
 
                 # print(f"We're in MazeLoader init function")
-                print(self.master_list)
-                print(self.master_list.keys())
-                print(len(self.master_list.keys()))
+                # print(self.master_list)
+                # print(self.master_list.keys())
+                # print(len(self.master_list.keys()))
                 current = self.master_list.get(start)
                 print(f"current = {current}")
                 # Change the implemenation of ReferenceMazeRunner, or replace it with your class here
