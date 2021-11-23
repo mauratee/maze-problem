@@ -6,74 +6,80 @@ from pathlib import Path
 
 class ReferenceMazeRunner:
 
-    def run(self, start, end):
-        """ Use breadth-first search to check if start and end nodes
+    # I wrote this algorithm and began to write unit tests based on this algorithm before
+    # I realized the generatedLarge.maze file errors out because it is a recursive algorithm.
+    # I've been travelling the last few days and am short on time but would otherwise have
+    # completed the breadth-first-search algorithm below to run the generatedLarge.maze file
+    # and completed the test suite below.
+    def run(self, start, end, seen=None, path=None):
+        """ Use recursive depth-first search to check if start and end nodes
             are connected and return the path that was traversed if connected. """
 
-        possible_rooms = deque()
-        seen = set()
-        possible_rooms.append(start)
+        # Keep track of nodes we've visited and initialize empty list to track path.
+        # Add start node to "seen" stack and check if start equals end.
+        if not seen:
+            seen = set()
+
+        if not path:
+            path = []
+
         seen.add(start)
-        path = []
-        
 
-        while possible_rooms:
+        if start is end:
+            return path
 
-            room = possible_rooms.popleft()
+        # Iterate through adjacency list for start node and get MazeSquare 
+        # object. Check if object is in "seen" set and if not, append direction 
+        # to path and recursively call run method on object. If recursive call 
+        # returns the "end" node, stop calling and return the path. Or else, 
+        # remove the most recent direction from path list.
+        for direction in start.exits:
+            exit_object = start.get_square(direction)
 
-            if room is end:
-                return path
+            if exit_object not in seen:
+                
+                path.append(direction)
+                call_next = self.run(exit_object, end, seen, path)
 
-            else:
-                for direction in room.exits:
-                    exit_object = room.get_square(direction)
-                    path.append(direction)
+                if call_next:
+                    return path
+                else:
+                    path.pop()
 
-                    if exit_object is end:
-                        return path
-
-                    if exit_object not in seen:
-                        possible_rooms.append(exit_object)
-                        seen.add(exit_object)
-                    else:
-                        path.pop()
-            
-
-
-    # def run(self, start, end, seen=None, path=None):
-    #     """ Use recursive depth-first search to check if start and end nodes
+    # This algorithm was written after I realized the generatedLarge.maze file was not running
+    # through the recursive DFS algo without errors. This is incomplete but if I had more time
+    # I would implement this algorithm for the generatedLarge.maze file
+    # def run(self, start, end):
+    #     """ Use breadth-first search to check if start and end nodes
     #         are connected and return the path that was traversed if connected. """
 
-    #     # Keep track of nodes we've visited and initialize empty list to track path.
-    #     # Add start node to "seen" stack and check if start equals end.
-    #     if not seen:
-    #         seen = set()
-
-    #     if not path:
-    #         path = []
-
+    #     possible_rooms = deque()
+    #     seen = set()
+    #     possible_rooms.append(start)
     #     seen.add(start)
+    #     path = []
+        
 
-    #     if start is end:
-    #         return path
+    #     while possible_rooms:
 
-    #     # Iterate through adjacency list for start node and get MazeSquare 
-    #     # object. Check if object is in "seen" set and if not, append direction 
-    #     # to path and recursively call run method on object. If recursive call 
-    #     # returns the "end" node, stop calling and return the path. Or else, 
-    #     # remove the most recent direction from path list.
-    #     for direction in start.exits:
-    #         exit_object = start.get_square(direction)
+    #         room = possible_rooms.popleft()
 
-    #         if exit_object not in seen:
-                
-    #             path.append(direction)
-    #             call_next = self.run(exit_object, end, seen, path)
+    #         if room is end:
+    #             return path
 
-    #             if call_next:
-    #                 return path
-    #             else:
-    #                 path.pop()
+    #         else:
+    #             for direction in room.exits:
+    #                 exit_object = room.get_square(direction)
+    #                 path.append(direction)
+
+    #                 if exit_object is end:
+    #                     return path
+
+    #                 if exit_object not in seen:
+    #                     possible_rooms.append(exit_object)
+    #                     seen.add(exit_object)
+    #                 else:
+    #                     path.pop()
 
 
 class MazeLoader:
