@@ -11,75 +11,92 @@ class ReferenceMazeRunner:
     # I've been travelling the last few days and am short on time but would otherwise have
     # completed the breadth-first-search algorithm below to run the generatedLarge.maze file
     # and completed the test suite below.
-    def run(self, start, end, seen=None, path=None):
-        """ Use recursive depth-first search to check if start and end nodes
-            are connected and return the path that was traversed if connected. """
+    # def run(self, start, end, seen=None, path=None):
+    #     """ Use recursive depth-first search to check if start and end nodes
+    #         are connected and return the path that was traversed if connected. """
 
-        # Keep track of nodes we've visited and initialize empty list to track path.
-        # Add start node to "seen" stack and check if start equals end.
-        if not seen:
-            seen = set()
+    #     # Keep track of nodes we've visited and initialize empty list to track path.
+    #     # Add start node to "seen" stack and check if start equals end.
+    #     if not seen:
+    #         seen = set()
 
-        if not path:
-            path = []
+    #     if not path:
+    #         path = []
 
-        seen.add(start)
+    #     seen.add(start)
 
-        if start is end:
-            return path
+    #     if start is end:
+    #         return path
 
-        # Iterate through adjacency list for start node and get MazeSquare 
-        # object. Check if object is in "seen" set and if not, append direction 
-        # to path and recursively call run method on object. If recursive call 
-        # returns the "end" node, stop calling and return the path. Or else, 
-        # remove the most recent direction from path list.
-        for direction in start.exits:
-            exit_object = start.get_square(direction)
+    #     # Iterate through adjacency list for start node and get MazeSquare 
+    #     # object. Check if object is in "seen" set and if not, append direction 
+    #     # to path and recursively call run method on object. If recursive call 
+    #     # returns the "end" node, stop calling and return the path. Or else, 
+    #     # remove the most recent direction from path list.
+    #     for direction in start.exits:
+    #         exit_object = start.get_square(direction)
 
-            if exit_object not in seen:
+    #         if exit_object not in seen:
                 
-                path.append(direction)
-                call_next = self.run(exit_object, end, seen, path)
+    #             path.append(direction)
+    #             call_next = self.run(exit_object, end, seen, path)
 
-                if call_next:
-                    return path
-                else:
-                    path.pop()
+    #             if call_next:
+    #                 return path
+    #             else:
+    #                 path.pop()
 
     # This algorithm was written after I realized the generatedLarge.maze file was not running
     # through the recursive DFS algo without errors. This is incomplete but if I had more time
     # I would implement this algorithm for the generatedLarge.maze file
-    # def run(self, start, end):
-    #     """ Use breadth-first search to check if start and end nodes
-    #         are connected and return the path that was traversed if connected. """
+    def run(self, start, end):
+        """ Use breadth-first search to check if start and end nodes
+            are connected and return the path that was traversed if connected. """
 
-    #     possible_rooms = deque()
-    #     seen = set()
-    #     possible_rooms.append(start)
-    #     seen.add(start)
-    #     path = []
+        possible_rooms = deque()
+        seen = set()
+        possible_rooms.append(start)
+        seen.add(start)
+        path = []
         
 
-    #     while possible_rooms:
+        while possible_rooms:
+            print(f"^^^^^^^^THIS IS THE START OF THE WHILE LOOP^^^^^^^^^^^^^^")
+            print(f"\npossible rooms queue is {possible_rooms}")
 
-    #         room = possible_rooms.popleft()
+            room = possible_rooms.popleft()
 
-    #         if room is end:
-    #             return path
+            print(f"\nroom is {room} (first object in possible_rooms queue)\n")
 
-    #         else:
-    #             for direction in room.exits:
-    #                 exit_object = room.get_square(direction)
-    #                 path.append(direction)
+            if room is end:
 
-    #                 if exit_object is end:
-    #                     return path
+                print(f"\nreturning path: {path} - {room} is {end}")
 
-    #                 if exit_object not in seen:
-    #                     possible_rooms.append(exit_object)
-    #                     seen.add(exit_object)
-    #                 else:
-    #                     path.pop()
+                return path
+
+            else:
+                print(f">>>>> We are in the else block >>>>>")
+                print(f"\nroom is {room}\n")
+                (f"\nroom.exits is {room.exits.keys()}")
+                for direction in room.exits.keys():
+                    print(f">>>>> We are in the for loop >>>>>")
+                    (f"\ndirection is {direction}")
+                    
+                    path.append(direction)
+                    exit_object = room.get_square(direction)
+
+                    (f"\nWe just appended {direction} to path. Path is now: {path}")
+                    (f"exit_object is {exit_object}")
+
+                    if exit_object is end:
+                        print(f"\nIn else block -> for loop -> if stmt returning path: {path} - {exit_object} is {end}")
+                        return path
+
+                    if exit_object not in seen:
+                        possible_rooms.append(exit_object)
+                        seen.add(exit_object)
+                    else:
+                        path.pop()
 
 
 class MazeLoader:
@@ -149,7 +166,7 @@ class MazeSquare:
     # Add repr method for more readable output of MazeSquare objects
     def __repr__(self):
         """Human-friendly representation of MazeSquare object"""
-        return f"<MazeSquare: {self.name}>"                       
+        return f"<MazeSquare: {self.name}, exits:{self.exits.keys()}>"                       
 
 MazeLoader()
 
@@ -272,6 +289,7 @@ MazeLoader()
 
 
 # unittest.main(verbosity=2)
+
 
 
 # call sample mazes in Command Line:
