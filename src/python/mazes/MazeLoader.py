@@ -76,27 +76,44 @@ class ReferenceMazeRunner:
 
             else:
                 print(f">>>>> We are in the else block >>>>>")
-                print(f"\nroom is {room}\n")
-                (f"\nroom.exits is {room.exits.keys()}")
+                # print(f"\nroom is {room}\n")
+                print(f"\nroom.exits is {room.exits}")
+
                 for direction in room.exits.keys():
-                    print(f">>>>> We are in the for loop >>>>>")
-                    (f"\ndirection is {direction}")
+
+                    print(f"\n>>>>> We are in the for loop >>>>>")
+                    print(f"\ndirection is {direction}")
                     
-                    path.append(direction)
                     exit_object = room.get_square(direction)
 
-                    (f"\nWe just appended {direction} to path. Path is now: {path}")
-                    (f"exit_object is {exit_object}")
+                    print(f"exit_object is {exit_object}")
 
                     if exit_object is end:
+
                         print(f"\nIn else block -> for loop -> if stmt returning path: {path} - {exit_object} is {end}")
                         return path
 
                     if exit_object not in seen:
+
+                        print(f"\n<<<<< We are in the if stmt (not in seen) <<<<<<")
+                        print(f"exit_object is {exit_object}")
+                        print(f"Seen is {seen}")
+
+                        path.append(direction)
                         possible_rooms.append(exit_object)
                         seen.add(exit_object)
+
+                        print(f"\nWe just appended {direction} to path. Path is now: {path}")
+                        print(f"\nWe just appended {exit_object} to possible_rooms. Possible_rooms is now: {possible_rooms}")
+                        print(f"\nWe just appended {exit_object} to seen. Seen is now: {seen}")
+
                     else:
-                        path.pop()
+                        
+                        if path:
+                            print(f"\n<<<<< We are in the else stmt (after not in seen) <<<<<<")
+                            print(f"\nWe just removed {direction} from path. Path is now: {path}")
+                            
+                            path.pop()
 
 
 class MazeLoader:
@@ -166,7 +183,7 @@ class MazeSquare:
     # Add repr method for more readable output of MazeSquare objects
     def __repr__(self):
         """Human-friendly representation of MazeSquare object"""
-        return f"<MazeSquare: {self.name}, exits:{self.exits.keys()}>"                       
+        return f"<MazeSquare: {self.name}>"                       
 
 MazeLoader()
 
