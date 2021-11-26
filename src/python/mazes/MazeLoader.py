@@ -6,6 +6,9 @@ from pathlib import Path
 import sys
 sys.setrecursionlimit(10000)
 
+# Import built-in memoization
+import functools
+
 
 class ReferenceMazeRunner:
 
@@ -14,124 +17,143 @@ class ReferenceMazeRunner:
     # I've been travelling the last few days and am short on time but would otherwise have
     # completed the breadth-first-search algorithm below to run the generatedLarge.maze file
     # and completed the test suite below.
-    def run(self, start, end, seen=None, path=None):
-        """ Use recursive depth-first search to check if start and end nodes
-            are connected and return the path that was traversed if connected. """
 
-        # Keep track of nodes we've visited and initialize empty list to track path.
-        # Add start node to "seen" stack and check if start equals end.
-        if not seen:
-            seen = set()
+    ##############
+    # Memoization function: TypeError: unhashable type: 'set'
+    # def memoize(f):
+    #     cache = {}
 
-        if not path:
-            path = []
+    #     def helper(*args):
+    #         if args in cache:
+    #             return cache[args]
+    #         result = f(*args)
+    #         cache[args] = result
+    #         return result
 
-        seen.add(start)
+    #     return helper
 
-        if start is end:
-            return path
+    # @functools.lru_cache(maxsize = 1000)
+    # def run(self, start, end, seen=None, path=None):
+    #     """ Use recursive depth-first search to check if start and end nodes
+    #         are connected and return the path that was traversed if connected. """
 
-        # Iterate through adjacency list for start node and get MazeSquare 
-        # object. Check if object is in "seen" set and if not, append direction 
-        # to path and recursively call run method on object. If recursive call 
-        # returns the "end" node, stop calling and return the path. Or else, 
-        # remove the most recent direction from path list.
-        for direction in start.exits:
-            exit_object = start.get_square(direction)
+    #     # Keep track of nodes we've visited and initialize empty list to track path.
+    #     # Add start node to "seen" stack and check if start equals end.
+    #     if not seen:
+    #         seen = set()
 
-            if exit_object not in seen:
+    #     if not path:
+    #         path = []
+
+    #     seen.add(start)
+
+    #     if start is end:
+    #         return path
+
+    #     # Iterate through adjacency list for start node and get MazeSquare 
+    #     # object. Check if object is in "seen" set and if not, append direction 
+    #     # to path and recursively call run method on object. If recursive call 
+    #     # returns the "end" node, stop calling and return the path. Or else, 
+    #     # remove the most recent direction from path list.
+    #     for direction in start.exits:
+    #         exit_object = start.get_square(direction)
+
+    #         if exit_object not in seen:
                 
-                path.append(direction)
-                call_next = self.run(exit_object, end, seen, path)
+    #             path.append(direction)
+    #             call_next = self.run(exit_object, end, seen, path)
 
-                if call_next:
-                    return path
-                else:
-                    path.pop()
+    #             if call_next:
+    #                 return path
+    #             else:
+    #                 path.pop()
+    #########################
+    # Call memoization function
+    # run = memoize(run)
 
     # This algorithm was written after I realized the generatedLarge.maze file was not running
     # through the recursive DFS algo without errors. This is incomplete but if I had more time
     # I would implement this algorithm for the generatedLarge.maze file
-    # def run(self, start, end):
-    #     """ Use breadth-first search to check if start and end nodes
-    #         are connected and return the path that was traversed if connected. """
+    def run(self, start, end):
+        """ Use breadth-first search to check if start and end nodes
+            are connected and return the path that was traversed if connected. """
 
-    #     possible_rooms = deque()
-    #     seen = {}
-    #     possible_rooms.append((start, None))
-    #     # seen.add(start)
+        possible_rooms = deque()
+        seen = set()
+        possible_rooms.append(start)
+        seen.add(start)
+        path = []
         
-        
+        room = possible_rooms.popleft()
 
-    #     while possible_rooms:
-    #         print(f"^^^^^^^^THIS IS THE START OF THE WHILE LOOP^^^^^^^^^^^^^^")
-    #         print(f"\npossible rooms queue is {possible_rooms}")
+        print(f"\nroom is {room} (first object in possible_rooms queue)\n")
 
-    #         room, prev = possible_rooms.popleft()
+        while room is not end:
+            print(f"^^^^^^^^THIS IS THE START OF THE WHILE LOOP^^^^^^^^^^^^^^")
+            print(f"\npossible rooms queue is {possible_rooms}")
 
-    #         print(f"\nroom is {room} (first object in possible_rooms queue)\n")
 
-    #         if room not in seen:
+            # if room not in seen:
 
-    #             seen[room] = prev
+            #     seen[room] = prev
 
-    #             if room is end:
+            #     if room is end:
 
-    #                 path = []
-    #                 print(f"\nreturning path: {path} - {room} is {end}")
+            #         path = []
+            #         print(f"\nreturning path: {path} - {room} is {end}")
 
-    #                 while room is not None:
-    #                     path.append(room)
-    #                     room = seen[room]
+            #         while room is not None:
+            #             path.append(room)
+            #             room = seen[room]
 
-    #                 return path[::-1]
+            #         return path[::-1]
                 
-    #             else:
-    #                 possible_rooms += [(room.get_square(direction), room) for direction in room.exits.keys()]
+            #     else:
+            #         possible_rooms += [(room.get_square(direction), room) for direction in room.exits.keys()]
 
-                # else:
-                #     print(f">>>>> We are in the else block >>>>>")
-                #     # print(f"\nroom is {room}\n")
-                #     print(f"\nroom.exits is {room.exits}")
 
-                #     possible_rooms.append(room)
-                #     seen.add(room)
+            print(f">>>>> We are in the else block >>>>>")
+            # print(f"\nroom is {room}\n")
+            print(f"\nroom.exits is {room.exits}")
 
-                #     for direction in room.exits.keys():
+            # possible_rooms.append(room)
+            seen.add(room)
 
-                #         print(f"\n>>>>> We are in the for loop >>>>>")
-                #         print(f"\ndirection is {direction}")
-                        
-                #         exit_object = room.get_square(direction)
+            for direction in room.exits.keys():
 
-                #         print(f"exit_object is {exit_object}")
+                print(f"\n>>>>> We are in the for loop >>>>>")
+                print(f"\ndirection is {direction}")
+                
+                exit_object = room.get_square(direction)
 
-                #         # if exit_object is end:
+                print(f"exit_object is {exit_object}")
 
-                #         #     print(f"\nIn else block -> for loop -> if stmt returning path: {path} - {exit_object} is {end}")
-                #         #     return path
+                # if exit_object is end:
 
-                #         if exit_object not in seen:
+                #     print(f"\nIn else block -> for loop -> if stmt returning path: {path} - {exit_object} is {end}")
+                #     return path
 
-                #             print(f"\n<<<<< We are in the if stmt (not in seen) <<<<<<")
-                #             print(f"exit_object is {exit_object}")
-                #             print(f"Seen is {seen}")
+                if exit_object not in seen:
 
-                #             path.append(direction)
-                #             possible_rooms.append(exit_object)
-                #             seen.add(exit_object)
+                    print(f"\n<<<<< We are in the if stmt (not in seen) <<<<<<")
+                    print(f"exit_object is {exit_object}")
+                    print(f"Seen is {seen}")
 
-                #             print(f"\nWe just appended {direction} to path. Path is now: {path}")
-                #             print(f"\nWe just appended {exit_object} to possible_rooms. Possible_rooms is now: {possible_rooms}")
-                #             print(f"\nWe just appended {exit_object} to seen. Seen is now: {seen}")
+                    path.append(direction)
+                    possible_rooms.append(exit_object)
+                    seen.add(exit_object)
 
-                #         else:
-                            
-                #             if path:
-                #                 print(f"\n<<<<< We are in the else stmt (after not in seen) <<<<<<")
-                #                 print(f"\nWe just removed {direction} from path. Path is now: {path}")
+                    print(f"\nWe just appended {direction} to path. Path is now: {path}")
+                    print(f"\nWe just appended {exit_object} to possible_rooms. Possible_rooms is now: {possible_rooms}")
+                    print(f"\nWe just appended {exit_object} to seen. Seen is now: {seen}")
 
-                #                 path.pop()
+                else:
+                    
+                    if path:
+                        print(f"\n<<<<< We are in the else stmt (after not in seen) <<<<<<")
+                        print(f"\nWe just removed {direction} from path. Path is now: {path}")
+
+                        path.pop()
 
 
 class MazeLoader:
