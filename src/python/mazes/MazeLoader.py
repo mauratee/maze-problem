@@ -6,33 +6,17 @@ from pathlib import Path
 import sys
 sys.setrecursionlimit(10000)
 
-# Import built-in memoization
-import functools
+
+##### || INSTRUCTIONS || ######
+
+# Run this program by calling `python3 MazeLoader.py` in the command line
+
+# Change which sample maze file is being run in the dunder name equals dunder main block
+# by commenting and un-commenting "file_to_open" line.
 
 
 class ReferenceMazeRunner:
 
-    # I wrote this algorithm and began to write unit tests based on this algorithm before
-    # I realized the generatedLarge.maze file errors out because it is a recursive algorithm.
-    # I've been travelling the last few days and am short on time but would otherwise have
-    # completed the breadth-first-search algorithm below to run the generatedLarge.maze file
-    # and completed the test suite below.
-
-    ##############
-    # Memoization function: TypeError: unhashable type: 'set'
-    # def memoize(f):
-    #     cache = {}
-
-    #     def helper(*args):
-    #         if args in cache:
-    #             return cache[args]
-    #         result = f(*args)
-    #         cache[args] = result
-    #         return result
-
-    #     return helper
-
-    # @functools.lru_cache(maxsize = 1000)
     def run(self, start, end, seen=None, path=None):
         """ Use recursive depth-first search to check if start and end nodes
             are connected and return the path that was traversed if connected. """
@@ -67,96 +51,7 @@ class ReferenceMazeRunner:
                     return path
                 else:
                     path.pop()
-    #########################
-    # Call memoization function
-    # run = memoize(run)
 
-    # This algorithm was written after I realized the generatedLarge.maze file was not running
-    # through the recursive DFS algo without errors. This is incomplete but if I had more time
-    # I would implement this algorithm for the generatedLarge.maze file
-    # def run(self, start, end):
-    #     """ Use breadth-first search to check if start and end nodes
-    #         are connected and return the path that was traversed if connected. """
-
-    #     possible_rooms = deque()
-    #     seen = set()
-    #     possible_rooms.append(start)
-    #     seen.add(start)
-    #     path = []
-        
-
-    #     # print(f"\nroom is {room} (first object in possible_rooms queue)\n")
-
-    #     while possible_rooms:
-    #         print(f"^^^^^^^^THIS IS THE START OF THE WHILE LOOP^^^^^^^^^^^^^^")
-    #         print(f"\npossible rooms queue is {possible_rooms}")
-
-
-    #         # if room not in seen:
-
-    #         #     seen[room] = prev
-
-    #         #     if room is end:
-
-    #         #         path = []
-    #         #         print(f"\nreturning path: {path} - {room} is {end}")
-
-    #         #         while room is not None:
-    #         #             path.append(room)
-    #         #             room = seen[room]
-
-    #         #         return path[::-1]
-                
-    #         #     else:
-    #         #         possible_rooms += [(room.get_square(direction), room) for direction in room.exits.keys()]
-
-
-    #         print(f">>>>> We are in the else block >>>>>")
-    #         # print(f"\nroom is {room}\n")
-    #         # print(f"\nroom.exits is {room.exits}")
-    #         room = possible_rooms.popleft()
-
-    #         if room is end:
-    #             print(f"\nreturning room: {room} is {end}")
-    #             return room
-    #         # possible_rooms.append(room)
-    #         seen.add(room)
-
-    #         for direction in room.exits:
-
-    #             print(f"\n>>>>> We are in the for loop >>>>>")
-    #             print(f"\ndirection is {direction}")
-
-    #             # path.append(direction)
-    #             exit_object = room.get_square(direction)
-
-    #             print(f"exit_object is {exit_object}")
-
-    #             # if exit_object is end:
-
-    #             #     print(f"\nIn else block -> for loop -> if stmt returning path: {path} - {exit_object} is {end}")
-    #             #     return path
-
-    #             if exit_object not in seen:
-
-    #                 print(f"\n<<<<< We are in the if stmt (not in seen) <<<<<<")
-    #                 print(f"exit_object is {exit_object}")
-    #                 print(f"Seen is {seen}")
-
-                    
-    #                 possible_rooms.append(exit_object)
-
-    #                 # print(f"\nWe just appended {direction} to path. Path is now: {path}")
-    #                 # print(f"\nWe just appended {exit_object} to possible_rooms. Possible_rooms is now: {possible_rooms}")
-    #                 # print(f"\nWe just appended {exit_object} to seen. Seen is now: {seen}")
-
-    #             # else:
-                    
-    #             #     if path:
-    #             #         print(f"\n<<<<< We are in the else stmt (after not in seen) <<<<<<")
-    #             #         print(f"\nWe just removed {direction} from path. Path is now: {path}")
-
-    #             #         path.pop()
 
 
 class MazeLoader:
@@ -165,7 +60,6 @@ class MazeLoader:
         
         try:
             with open(file_to_open) as f:
-            # with open(sys.argv[1], 'r') as f:
                 cell_nums = int(f.readline())
                 for _ in range(cell_nums):
                     curr_line = f.readline()
@@ -223,7 +117,6 @@ class MazeSquare:
         """Human-friendly representation of MazeSquare object"""
         return f"<MazeSquare: {self.name}>"                       
 
-# MazeLoader()
 
 
 
@@ -232,15 +125,8 @@ class Test(unittest.TestCase):
     def setUp(self):
         self.master_list = {}
 
-        # data_folder = Path("/home/mauratee/src/mazes-takehome/src/samples/")
-        # # file_to_open = data_folder / "simple.maze"
-        # # file_to_open = data_folder / "generated100.maze"
-        # # file_to_open = data_folder / "generated1000.maze"
-        # # file_to_open = data_folder / "generatedLong2.maze"
-        # file_to_open = data_folder / "generatedsparse.maze"
         f = open(file_to_open)
         
-
         cell_nums = int(f.readline())
         for _ in range(cell_nums):
             curr_line = f.readline()
@@ -263,6 +149,8 @@ class Test(unittest.TestCase):
 
         self.start = start
         self.end = end
+
+        f.close()
 
     
     def test_ReferenceMazeRunner_simplemaze(self):
@@ -325,6 +213,14 @@ class Test(unittest.TestCase):
         'spinwise', 'right', 'right', 'outside', 'slide']
         self.assertEqual(actual, expected)
 
+    def test_ReferenceMazeRunner_generatedLongmaze(self):
+        begin = self.master_list.get(self.start)
+        finish = self.master_list.get(self.end)
+        runner = ReferenceMazeRunner()
+        actual = runner.run(begin, finish)
+        expected = ['north', 'slide', 'left', 'stutter', 'slide', 'east', 'descend', 'east', 'outside', 'east', 'descend', 'east', 'forward', 'slide', 'forward', 'left', 'inside', 'ascend', 'forward', 'descend', 'spinwise', 'descend', 'descend', 'descend', 'spinwise', 'east', 'descend', 'descend', 'stutter', 'ascend', 'forward', 'descend', 'forward', 'south', 'ascend', 'ascend', 'forward', 'left', 'left', 'descend', 'ascend', 'ascend', 'left', 'spinwise', 'left', 'forward', 'ascend', 'ascend', 'forward', 'descend', 'forward', 'up', 'south', 'slide', 'ascend', 'ascend', 'forward', 'left', 'ascend', 'right', 'descend', 'spinwise', 'left', 'ascend', 'east', 'left', 'ascend', 'descend', 'east', 'right', 'descend', 'north', 'spinwise', 'ascend', 'east', 'inside', 'left', 'ascend', 'stutter', 'left', 'descend', 'descend', 'inside', 'north', 'spinwise', 'east', 'west', 'up', 'spinwise', 'east', 'east', 'ascend', 'east', 'ascend', 'stutter', 'east', 'stutter', 'stutter', 'ascend', 'ascend', 'ascend', 'east', 'east', 'stutter', 'forward', 'inside', 'east', 'outside', 'left', 'east', 'spinwise', 'descend', 'stutter', 'spinwise', 'ascend', 'east', 'east', 'left', 'north', 'spinwise', 'forward', 'stutter', 'east', 'ascend', 'east', 'east', 'descend', 'stutter', 'spinwise', 'north', 'left', 'north', 'left', 'east', 'stutter', 'spinwise', 'descend', 'forward', 'ascend', 'west', 'stutter', 'south', 'spinwise', 'ascend', 'spinwise', 'east', 'east', 'south', 'ascend', 'ascend', 'ascend', 'east', 'ascend', 'ascend', 'stutter', 'up', 'slide', 'descend', 'ascend', 'outside', 'south', 'east', 'east', 'spinwise', 'forward', 'ascend', 'descend', 'north', 'forward', 'east', 'descend', 'descend', 'ascend', 'east', 'south', 'spinwise', 'east', 'descend', 'spinwise', 'east', 'east', 'east', 'left', 'left', 'north', 'east', 'forward', 'stutter', 'left', 'stutter', 'ascend', 'ascend', 'up', 'up', 'ascend', 'descend', 'left', 'left', 'east', 'east', 'descend', 'spinwise', 'ascend', 'slide', 'ascend', 'descend', 'east', 'ascend', 'east', 'left', 'spinwise', 'forward', 'east', 'descend', 'south', 'descend', 'left', 'left', 'left', 'spinwise', 'ascend', 'south', 'left', 'east', 'ascend', 'left', 'descend', 'outside', 'spinwise', 'east', 'forward', 'forward', 'slide', 'north', 'ascend', 'outside', 'slide', 'east', 'east', 'ascend', 'left', 'spinwise', 'east', 'descend', 'east', 'descend', 'east', 'east', 'stutter', 'left', 'forward', 'spinwise', 'east', 'east', 'ascend', 'left']
+        self.assertEqual(actual, expected)
+
     def test_ReferenceMazeRunner_generatedlong2maze(self):
         begin = self.master_list.get(self.start)
         finish = self.master_list.get(self.end)
@@ -354,31 +250,20 @@ class Test(unittest.TestCase):
             'south', 'up', 'east', 'east', 'forward', 'north', 'forward', 'left', 'descend', 'descend', 'right', 'west', 'slide', 'north', 'east', 'left', 'right', 'left', 'east', 'ascend', 'left', 'left', 'spinwise', 'ascend', 'up', 'spinwise', 'north', 'ascend', 'stutter', 'east', 'spinwise', 'north', 'forward', 'inside', 'ascend', 'right', 'forward', 'up', 'forward', 'south', 'right', 'ascend', 'ascend', 'east', 'forward', 'up', 'ascend', 'stutter', 'inside', 'forward', 'south', 'descend', 'left', 'spinwise', 'left', 'east', 'spinwise', 'east', 'ascend', 'inside', 'east', 'slide', 'up', 'south', 'ascend', 'spinwise', 'slide', 'east', 'east', 'left', 'left', 'spinwise', 'spinwise', 'backwards', 'east', 'ascend', 'south', 'outside', 'ascend', 'ascend', 'spinwise', 'stutter', 'descend', 'backwards', 'slide', 'east', 'forward', 'south', 'spinwise', 'spinwise', 'spinwise', 'south', 'descend', 'forward', 'north', 'ascend', 'stutter', 'south', 'stutter', 'south', 'stutter', 'east', 'ascend', 'slide', 'slide', 'inside', 'forward', 'stutter', 'south', 'slide', 'descend', 'forward', 'east', 'ascend', 'descend', 'left', 'east', 'ascend', 'forward', 'left', 'south', 'slide', 'up', 'north', 'left', 'east', 'spinwise', 'ascend', 'east', 'inside', 'right', 'ascend', 'forward', 'left', 'spinwise', 'descend', 'forward', 'forward', 'spinwise', 'outside', 'left', 'descend', 'inside', 'spinwise', 'left', 'left', 'ascend', 'up', 'south', 'left', 'spinwise', 'left', 'slide', 'east', 'ascend', 'spinwise', 'descend', 'forward', 'outside', 'south', 'ascend', 'slide', 'east', 'north', 'ascend', 'stutter', 'east', 'ascend', 'slide', 'ascend', 'right', 'descend', 'west', 'north', 'forward', 'slide', 'inside', 'north', 'left', 'descend', 'slide', 'left', 'north', 'spinwise', 'left', 'widdershins', 'forward', 'south', 'descend', 'north', 'ascend', 'north', 'ascend', 'east', 'left', 'forward', 'up', 'widdershins', 'widdershins', 'stutter', 'spinwise', 'up', 'spinwise', 'descend', 'descend', 'east', 'ascend', 'slide', 'forward', 'stutter', 'stutter', 'east', 'ascend', 'descend', 'up', 'left', 'inside', 'inside', 'stutter', 'stutter', 'south', 'ascend', 'backwards', 'east', 'left', 'east', 'east', 'outside', 'widdershins', 'backwards', 'south', 'spinwise', 'spinwise', 'left', 'left', 'east', 'ascend', 'slide', 'left', 'east', 'descend', 'backwards', 'stutter', 'north', 'descend', 'descend', 'left', 'stutter', 'widdershins', 'ascend', 'ascend', 'descend', 'stutter', 'right', 'stutter', 'ascend', 'descend', 'left', 'ascend', 'left', 'forward', 'east', 'forward', 'east', 'outside', 'stutter', 'south', 'ascend', 'forward', 'ascend', 'stutter', 'forward', 'west', 'descend', 'east', 'east', 'inside', 'slide', 'stutter', 'ascend', 'north', 'south', 'spinwise', 'inside', 'slide', 'slide', 'backwards', 'right', 'ascend', 'outside', 'east', 'up', 'slide', 'west', 'south', 'inside', 'south', 'spinwise', 'slide', 'north', 'left', 'east', 'descend', 'west', 'left', 'outside', 'ascend', 'west', 'slide', 'descend', 'outside', 'ascend', 'widdershins', 'spinwise', 'inside', 'right', 'right', 'forward', 'spinwise', 'up', 'descend', 'inside', 'left', 'east', 'east', 'south', 'ascend', 'outside', 'ascend', 'left', 'forward', 'north', 'stutter', 'forward', 'slide', 'left', 'slide', 'forward', 'up', 'slide', 'forward', 'stutter', 'stutter', 'stutter', 'descend', 'stutter', 'forward', 'descend', 'south', 'left', 'descend', 'north', 'north', 'ascend', 'left', 'forward', 'outside', 'stutter', 'inside', 'ascend', 'inside', 'east', 'stutter', 'spinwise', 'ascend', 'inside', 'ascend', 'north', 'spinwise', 'descend', 'up', 'north', 'north', 'east', 'up', 'right', 'spinwise', 'slide', 'spinwise', 'south', 'north', 'north', 'forward', 'descend', 'stutter', 'outside', 'ascend', 'east', 'left', 'spinwise', 'east', 'left', 'ascend', 'spinwise', 'north', 'ascend', 'spinwise', 'left', 'inside', 'down', 'east', 'ascend', 'east', 'inside', 'widdershins', 'ascend', 'slide', 'east', 'spinwise', 'north', 'spinwise', 'slide', 'widdershins', 'forward', 'inside', 'spinwise', 'slide', 'ascend', 'spinwise', 'ascend', 'forward', 'spinwise', 'east', 'up', 'ascend', 'descend', 'north', 'forward', 'left', 'spinwise', 'spinwise', 'outside', 'down', 'outside', 'stutter', 'ascend', 'spinwise', 'east', 'forward', 'forward', 'up', 'ascend', 'forward', 'east', 'west', 'up', 'south', 'backwards', 'left', 'forward', 'left', 'ascend', 'stutter', 'stutter', 'left', 'spinwise', 'north', 'ascend', 'outside', 'ascend', 'ascend', 'east', 'right', 'east', 'down', 'east', 'south', 'left', 'west', 'slide', 'right', 'south', 'ascend', 'east', 'spinwise', 'stutter', 'outside', 'left', 'spinwise', 'forward', 'descend', 'north', 'left', 'east', 'spinwise', 'spinwise', 'north', 'spinwise', 'east', 'ascend', 'left', 'descend', 'east', 'north', 'ascend', 'left', 'spinwise', 'descend', 'forward', 'left', 'backwards', 'left', 'east', 'forward', 'ascend', 'right', 'slide', 'ascend', 'ascend', 'ascend', 'slide', 'descend', 'south', 'spinwise', 'descend', 'left', 'ascend', 'outside', 'stutter', 'outside', 'spinwise', 'forward', 'ascend', 'outside', 'left', 'descend', 'east', 'ascend', 'spinwise', 'south', 'east', 'slide', 'spinwise', 'right', 'left', 'slide', 'left', 'spinwise', 'outside', 'forward', 'ascend', 'descend', 'spinwise', 'inside', 'up', 'north', 'widdershins', 'forward', 'ascend', 'east', 'inside', 'east', 'stutter', 'south', 'east', 'slide', 'left', 'backwards', 'ascend', 'stutter', 'spinwise', 'stutter', 'spinwise', 'outside', 'descend', 'left', 'stutter', 'north', 'spinwise', 'east', 'left', 'east', 'ascend', 'slide', 'outside', 'west', 'left', 'ascend', 'forward', 'slide', 'spinwise', 'left', 'ascend', 'descend', 'stutter', 'left', 'forward', 'inside', 'forward', 'east', 'slide', 'spinwise', 'slide', 'slide', 'east', 'east', 'right', 'ascend', 'spinwise', 'west', 'west', 'east', 'outside', 'descend', 'east', 'spinwise', 'ascend', 'east', 'ascend', 'forward', 'spinwise', 'forward', 'forward', 'east', 'ascend', 'up', 'forward', 'stutter', 'backwards', 'left', 'forward', 'descend', 'ascend', 'north', 'outside', 'south', 'outside', 'north', 'north', 'inside', 'south', 'spinwise', 'left', 'spinwise', 'spinwise', 'slide', 'north', 'outside', 'left', 'east', 'south', 'left', 'east', 'slide', 'descend', 'forward', 'left', 'right', 'west', 'spinwise', 'up', 'left', 'west', 'south', 'outside', 'up', 'east', 'ascend', 'outside', 'east', 'backwards', 'slide', 'ascend', 'forward', 'down', 'outside', 'north', 'ascend', 'ascend', 'east', 'north', 'stutter', 'spinwise', 'up', 'inside', 'left', 'east', 'forward', 'descend', 'spinwise', 'left', 'ascend', 'spinwise', 'east', 'east', 'left', 'forward', 'forward', 'descend', 'slide', 'ascend', 'up', 'descend', 'spinwise', 'ascend', 'inside', 'ascend', 'slide', 'east', 'south', 'up', 'backwards', 'east', 'ascend', 'east', 'left', 'outside', 'spinwise', 'up', 'north', 'slide', 'down', 'forward', 'forward', 'down', 'spinwise', 'descend', 'descend', 'south', 'ascend', 'up', 'widdershins', 'stutter', 'up', 'north', 'north']
         self.assertEqual(actual, expected)
 
-# unittest.main(verbosity=2)
+
+
 
 if __name__ == "__main__":
     data_folder = Path("/home/mauratee/src/mazes-takehome/src/samples/")
+
     file_to_open = data_folder / "simple.maze"
     # file_to_open = data_folder / "generated100.maze"
     # file_to_open = data_folder / "generated1000.maze"
+    # file_to_open = data_folder / "generatedLarge.maze"
+    # file_to_open = data_folder / "generatedLong.maze"
     # file_to_open = data_folder / "generatedLong2.maze"
     # file_to_open = data_folder / "generatedsparse.maze"
 
     MazeLoader()
 
     unittest.main(verbosity=2)
-
-
-
-# call sample mazes in Command Line:
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
-# python3 MazeLoader.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
-
-
-
-
