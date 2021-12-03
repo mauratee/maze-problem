@@ -14,6 +14,9 @@ sys.setrecursionlimit(10000)
 # Change which sample maze file is being run in the dunder name equals dunder main block
 # by commenting and un-commenting "file_to_open" line.
 
+# You will also need to update the `data_folder` Path in dunder name equals dunder main
+# to the correct path of the `samples` folder in your local environment.
+
 
 class ReferenceMazeRunner:
 
