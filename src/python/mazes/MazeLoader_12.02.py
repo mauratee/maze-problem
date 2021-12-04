@@ -2,20 +2,14 @@ import sys
 from collections import deque
 import unittest
 from pathlib import Path
-# Change Python recursion limit to accomodate more recursive calls
-import sys
-sys.setrecursionlimit(10000)
 
-
-##### || INSTRUCTIONS || ######
-
-# Run this program by calling `python3 MazeLoader.py` in the command line
-
-# Change which sample maze file is being run in the dunder name equals dunder main block
-# by commenting and un-commenting "file_to_open" line.
-
-# You will also need to update the `data_folder` Path in dunder name equals dunder main
-# to the correct path of the `samples` folder in your local environment.
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
+# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
 
 
 class ReferenceMazeRunner:
@@ -27,93 +21,27 @@ class ReferenceMazeRunner:
         possible_rooms.append(start)
         seen = {start: None}
 
-        # path = []
 
         while possible_rooms:
             current_room = possible_rooms.popleft()
-            print(f"checking current room = {current_room}")
-            # print(type(person))
+
             if current_room is end:
-                print(f"returning path: {current_room} is {end}")
-
-                # def get_path(predecessors, start, goal):
-                current = current_room
-                room_path = []
+                # print(f"returning path: {current_room} is {end}")
                 path = []
-                while current != start:
-                    directions = current.exits
-                    print(directions)
-                    room_path.append(current)
-                    current = seen[current]
-                room_path.append(start)
-                room_path.reverse()
-                print(f"room path = {room_path}")
 
-                for _ in range(len(room_path)-1):
-                    room = room_path[_]
-                    directions = room.exits
-                    print(directions)
-                    for direction in directions:
-                        if directions[direction] == room_path[_+1]:
-                            path.append(direction)
+                while current_room != start:
+                    path.append(seen[current_room][1])
+                    current_room = seen[current_room][0]
+                path.reverse()
+                
                 print(f"path = {path}")
                 return path
 
             for direction in current_room.exits:
-                # print(direction)
                 exit_room = current_room.get_square(direction)
                 if exit_room not in seen:
-                    # path.append(direction)
-                    # print(f"we appended {direction} to {path}")
                     possible_rooms.append(exit_room)
-                    seen[exit_room] = current_room
-
-            
-        #     else:
-        #         # set math: anything in person.adjacent that is not in seen
-        #         for friend in person.adjacent - seen:
-        #             # print(friend)
-        #             possible_nodes.append(friend)
-        #             seen.add(friend)
-        #             path.append([friend.name])
-        #             print("added to queue:", friend)
-        # return False
-
-
-    # def run(self, start, end, seen=None, path=None):
-    #     """ Use recursive depth-first search to check if start and end nodes
-    #         are connected and return the path that was traversed if connected. """
-
-    #     # Keep track of nodes we've visited and initialize empty list to track path.
-    #     # Add start node to "seen" stack and check if start equals end.
-    #     if not seen:
-    #         seen = set()
-
-    #     if not path:
-    #         path = []
-
-    #     seen.add(start)
-
-    #     if start is end:
-    #         return path
-
-    #     # Iterate through adjacency list for start node and get MazeSquare 
-    #     # object. Check if object is in "seen" set and if not, append direction 
-    #     # to path and recursively call run method on object. If recursive call 
-    #     # returns the "end" node, stop calling and return the path. Or else, 
-    #     # remove the most recent direction from path list.
-    #     for direction in start.exits:
-    #         exit_object = start.get_square(direction)
-
-    #         if exit_object not in seen:
-                
-    #             path.append(direction)
-    #             call_next = self.run(exit_object, end, seen, path)
-
-    #             if call_next:
-    #                 return path
-    #             else:
-    #                 path.pop()
+                    seen[exit_room] = [current_room, direction]
 
 
 
@@ -332,15 +260,3 @@ class MazeSquare:
 #     unittest.main(verbosity=2)
 
 MazeLoader()
-
-
-### PASSING ###
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
-
-### NOT PASSING ###
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
