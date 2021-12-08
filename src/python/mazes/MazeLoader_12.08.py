@@ -3,27 +3,27 @@ from collections import deque
 import unittest
 from pathlib import Path
 
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
-# python3 MazeLoader_12.02.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/simple.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/generated100.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/generatedsparse.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/generated1000.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/generatedLarge.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong.maze
+# python3 MazeLoader_12.08.py /home/mauratee/src/mazes-takehome/src/samples/generatedLong2.maze
 
 
 class ReferenceMazeRunner:
 
     def run(self, start, end):
-        """Use breadth-first-search to find shortest path."""
+        """Use iterative depth-first-search to find valid path."""
 
-        possible_rooms = deque()
+        possible_rooms = []
         possible_rooms.append(start)
         seen = {start: None}
 
 
         while possible_rooms:
-            current_room = possible_rooms.popleft()
+            current_room = possible_rooms.pop()
             print(f"current_room = {current_room}")
 
             if current_room is end:
